@@ -1,0 +1,100 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+
+                
+    <!-- Content Wrapper START -->
+    <div class="main-content">
+        <div class="page-header">
+            <h2 class="header-title">SHOP</h2>
+            <div class="header-sub-title">
+                <nav class="breadcrumb breadcrumb-dash">
+                    <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Dashboard</a>
+                    <a class="breadcrumb-item" href="#">Maxsulot</a>
+                    <span class="breadcrumb-item active">Yaratish</span>
+                </nav>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h4>Maxsulot yaratish</h4>
+                <div class="m-t-25" style="max-width: 700px">
+                    <form method="post" enctype="multipart/form-data">{% csrf_token %}
+                        <div class="form-group row">
+                            <label for="inputPassword3" class="col-sm-2 col-form-label">Nom</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputPassword3" placeholder="..." name="name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputPassword3" class="col-sm-2 col-form-label">Category</label>
+                            <div class="col-sm-10">
+                                <select name="category_id" class="form-control">
+                                    {% for c in categorys %}
+                                    <option value="{{c.id}}">{{c.name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputPassword3" class="col-sm-2 col-form-label">Narx</label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" id="inputPassword3" placeholder="..." name="price">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputPassword3" class="col-sm-2 col-form-label">Son/Miqdor</label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" id="inputPassword3" placeholder="..." name="quantity">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputPassword3" class="col-sm-2 col-form-label">Yetkazib berish</label>
+                            <div class="col-sm-10">
+                                <input type="checkbox" id="inputPassword3" placeholder="..." name="delivery">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputPassword3" class="col-sm-2 col-form-label">Batafsil</label>
+                            <div class="col-sm-10">
+                                <textarea name="body" class="form-control" cols="30" rows="10"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputPassword3" class="col-sm-2 col-form-label">Banner rasm</label>
+                            <div class="col-sm-10">
+                                <input type="file" class="form-control" id="inputPassword3" name="banner_img" >
+                            </div>
+                        </div>
+                       
+                        <h3>Product uchun rasmlar:</h3>
+                        <div class="custom-file" style="border: 1px solid #b3aeae; margin-bottom:40px; border-radius: 5px; height: 42px;" >
+                            <input type="file" class="custom-file-input" id="customFile" name="images" multiple>
+                            <label style="margin-bottom: 0; height: 40px;" class="custom-file-label" for="customFile">Rasmlar <i class="anticon anticon-file-add"></i> </label>
+                        </div>
+                        <!-- {% for image in images %}
+                        <img src="{{image.url}}" class="card-img-top" alt="">
+                        {% endfor %} -->
+                        
+                        <br>
+                        <h3>Product uchun videolar</h3>
+                        <div class="custom-file" style="border: 1px solid #b3aeae; margin-bottom:30px; border-radius: 5px; height: 42px;" >
+                            <input type="file" class="custom-file-input" id="customFile" name="videos" multiple>
+                            <label class="custom-file-label" for="customFile">Videolar <i class="anticon anticon-file-add"></i></label>
+                        </div>
+                        
+
+                        <div class="form-group row">
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-primary">Yaratish</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content Wrapper END -->
+
+
+{% endblock %}

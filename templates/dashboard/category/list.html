@@ -1,0 +1,118 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+
+
+<div class="main-content">
+    <div class="page-header">
+        <h2 class="header-title">SHOP</h2>
+        <div class="header-sub-title">
+            <nav class="breadcrumb breadcrumb-dash">
+                <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Dashboard</a>
+                <a class="breadcrumb-item" href="#">Category</a>
+                <span class="breadcrumb-item active">Ro`yxat</span>
+            </nav>
+
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row d-flex justify-content-between">
+                <h4 style="display: inline-block;">Categorylar ro`yxat</h4>
+                <a href="{% url 'dashboard:category_create' %}" style="display: inline-block; margin-right: 50px;"> <button type="button" class="btn btn-primary" style="z-index: 2;">Category add</button> </a>
+            </div>
+            <div class="m-t-25">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nom</th>
+                                <th scope="col">Harakatlar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for q in queryset %}
+                            <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{q.name}}</td>
+                                
+                                    <td>
+                                        <button class="btn btn-icon btn-hover btn-sm btn-rounded pull-right" data-toggle="modal" data-target="#exampleModalupdate{{forloop.counter}}">
+                                            <a></a><i class="anticon anticon-edit"></i> 
+                                        </button>
+
+                                        <button class="btn btn-icon btn-hover btn-sm btn-rounded" data-toggle="modal" data-target="#exampleModaldelete{{forloop.counter}}">
+                                            <a></a><i class="anticon anticon-delete"></i> 
+                                        </button>
+                                      
+                                    </td>
+                                
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Button trigger modal -->
+
+<!-- Modal -->
+{% for q in queryset  %}
+<div class="modal fade" id="exampleModalupdate{{forloop.counter}}">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Categoryani tahrirlash</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="anticon anticon-close"></i>
+                </button>
+            </div>
+            <form method="post" action="{% url 'dashboard:category_update' q.id %}">{% csrf_token %}
+            <div class="modal-body">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">Nom</label>
+                <div class="col-sm-10">
+                   <input type="text" class="form-control" id="inputPassword3" value="{{q.name}}" name="name">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-default" data-dismiss="modal">yopish</button>
+                <button type="submit" class="btn btn-primary">Saqlash</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% for q in queryset  %}
+<div class="modal fade" id="exampleModaldelete{{forloop.counter}}">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Categoryani tahrirlash</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="anticon anticon-close"></i>
+                </button>
+            </div>
+            <form method="get" action="{% url 'dashboard:category_delete' q.id %}">{% csrf_token %}
+            <div class="modal-body">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">Nom</label>
+                <div class="col-sm-10">
+                    <h5 >{{q.name}}</h5>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-default" data-dismiss="modal">Yopish</button>
+                <button type="submit" class="btn btn-danger">O'chirish</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

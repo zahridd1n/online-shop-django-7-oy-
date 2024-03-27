@@ -1,0 +1,161 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+
+                
+    <!-- Content Wrapper START -->
+    <div class="main-content">
+        <div class="page-header">
+            <h2 class="header-title">SHOP</h2>
+            <div class="header-sub-title">
+                <nav class="breadcrumb breadcrumb-dash">
+                    <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Dashboard</a>
+                    <a class="breadcrumb-item" href="#">Maxsulot</a>
+                    <span class="breadcrumb-item active">Tahrirlash</span>
+                </nav>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h4>Maxsulot yaratish</h4>
+                <div class="m-t-25" style="max-width: 700px">
+                    <form method="post" enctype="multipart/form-data">{% csrf_token %}
+                        <div class="form-group row">
+                            <label for="inputPassword3" class="col-sm-2 col-form-label">Nom</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputPassword3" value="{{product.name}}" name="name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputPassword3" class="col-sm-2 col-form-label">Category</label>
+                            <div class="col-sm-10">
+                                <select name="category_id" class="form-control">
+                                    {% for c in categorys %}
+                                    {% if c == product.category %}
+                                    <option value="{{c.id}}" selected>{{c.name}}</option>
+                                    {% else %}
+                                    <option value="{{c.id}}">{{c.name}}</option>
+                                    
+                                    {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputPassword3" class="col-sm-2 col-form-label">Narx</label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" id="inputPassword3" value="{{product.price}}" name="price">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputPassword3" class="col-sm-2 col-form-label">Son/Miqdor</label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" id="inputPassword3" value="{{product.quantity}}" name="quantity">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputPassword3" class="col-sm-2 col-form-label">Yetkazib berish</label>
+                            <div class="col-sm-10">
+                                {% if product.delivery %}
+                                <input type="checkbox" id="inputPassword3" checked name="delivery">
+                                {% else %}
+                                <input type="checkbox" id="inputPassword3"  name="delivery">
+                                {% endif %}
+
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputPassword3" class="col-sm-2 col-form-label">Batafsil</label>
+                            <div class="col-sm-10">
+                                <textarea name="body" class="form-control" cols="30" rows="10">{{product.body}}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <span>Joriy Banner rasm:</span>
+                            <img  style="margin: 10px;height: 300px;" src="{{product.banner_img.url}}" alt=""><br>
+                        </div>
+
+                        <div class="form-group row">
+               
+                            <label for="inputPassword3" class="col-sm-2 col-form-label">Yangi Banner rasm:</label>
+                            <div class="col-sm-10">
+                                <input  type="file" class="form-control" id="inputPassword3" name="banner_img" >
+                            </div>
+                        </div><hr>
+                       
+                        <div class="form-group" >
+                            <h3 class="header-title" style="display: block;">Product uchun rasmlar:</h3>
+                            
+                            {% for image in images %}
+                                <div style="display: inline-block;">
+                                <section  style="display: flex; width: 160px; flex-direction: column; align-items: center; border: 1px solid #b3aeae; border-radius: 12px; margin: 10px;">
+                                <img  style="margin-right:10px; width: 144px; height: 120px;margin: 10px;border-radius: 12px;" src="{{image.img.url}}" alt="" >
+                           
+                                    
+                                    
+                                    <button name="imgdelete{{image.id}}" style="display: inline-block; margin: 10px;"  class="btn btn-danger btn-hover btn-sm btn-rounded">
+                                        <i class="anticon anticon-delete"></i> O'chirish </button>
+                   
+                                </section>
+                            </div>
+                            {% endfor %}
+                           
+                        </div>
+                        <h4>Rasm qo'shish</h4>
+                        <div class="custom-file" style="border: 1px solid #b3aeae; margin-bottom:40px; border-radius: 5px; height: 42px;" >
+                            <input type="file" class="custom-file-input" id="customFile" name="images" multiple>
+                            <label style="margin-bottom: 0; height: 40px;" class="custom-file-label" for="customFile">Rasmlar <i class="anticon anticon-file-add"></i> </label>
+                        </div>
+
+
+                        <div class="form-group" >
+                            <h3 class="header-title" style="display: block;">Product uchun videolar:</h3>
+                            
+                            {% for video in videos %}
+                                <div style="display: inline-block;">
+                                <section  style="display: flex; width: 160px; flex-direction: column; align-items: center; border: 1px solid #b3aeae; border-radius: 12px; margin: 10px;">
+                                <img  style="margin-right:10px; width: 144px; height: 120px;margin: 10px;border-radius: 12px;" src="{{video.video.url}}" alt="" >
+                             
+                                    
+                                    
+                                    <button style="display: inline-block; margin: 10px;"  class="btn btn-danger btn-hover btn-sm btn-rounded" data-toggle="modal" data-target="#videodelete{{forloop.counter}}">
+                                        <i class="anticon anticon-delete"></i> O'chirish</button>
+
+                                </section>
+                            </div>
+                            {% endfor %}
+                           
+                        </div>
+                        <h4>Rasm qo'shish</h4>
+                        <div class="custom-file" style="border: 1px solid #b3aeae; margin-bottom:40px; border-radius: 5px; height: 42px;" >
+                            <input type="file" class="custom-file-input" id="customFile" name="images" multiple>
+                            <label style="margin-bottom: 0; height: 40px;" class="custom-file-label" for="customFile">Rasmlar <i class="anticon anticon-file-add"></i> </label>
+                        </div>
+                       
+                        
+                        <br>
+                        <h3>Product uchun videolar</h3>
+                        <div class="custom-file" style="border: 1px solid #b3aeae; margin-bottom:30px; border-radius: 5px; height: 42px;" >
+                            <input type="file" class="custom-file-input" id="customFile" name="videos" multiple>
+                            <label class="custom-file-label" for="customFile">Videolar <i class="anticon anticon-file-add"></i></label>
+                        </div><br>
+                        
+
+                        <div class="form-group row">
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-primary">Yaratish</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% for image in images %}
+
+    {% endfor %}
+    <!-- Content Wrapper END -->
+
+
+{% endblock %}
