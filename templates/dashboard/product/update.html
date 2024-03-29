@@ -94,9 +94,11 @@
                            
                                     
                                     
-                                    <button name="imgdelete{{image.id}}" style="display: inline-block; margin: 10px;"  class="btn btn-danger btn-hover btn-sm btn-rounded">
-                                        <i class="anticon anticon-delete"></i> O'chirish </button>
-                   
+                                    <a  data-toggle="modal" data-target="#imgdelete{{forloop.counter}}"><button  style="display: inline-block; margin: 10px;"  class="btn btn-danger btn-hover btn-sm btn-rounded" >
+                                        <i class="anticon anticon-delete"></i> O'chirish 
+                                    </button></a>
+
+
                                 </section>
                             </div>
                             {% endfor %}
@@ -119,23 +121,21 @@
                              
                                     
                                     
-                                    <button style="display: inline-block; margin: 10px;"  class="btn btn-danger btn-hover btn-sm btn-rounded" data-toggle="modal" data-target="#videodelete{{forloop.counter}}">
-                                        <i class="anticon anticon-delete"></i> O'chirish</button>
+                                    <a  data-toggle="modal" data-target="#videodelete{{forloop.counter}}"><button style="display: inline-block; margin: 10px;"  class="btn btn-danger btn-hover btn-sm btn-rounded" >
+                                        <i class="anticon anticon-delete"></i> O'chirish</button></a>
+
+
 
                                 </section>
                             </div>
                             {% endfor %}
                            
                         </div>
-                        <h4>Rasm qo'shish</h4>
-                        <div class="custom-file" style="border: 1px solid #b3aeae; margin-bottom:40px; border-radius: 5px; height: 42px;" >
-                            <input type="file" class="custom-file-input" id="customFile" name="images" multiple>
-                            <label style="margin-bottom: 0; height: 40px;" class="custom-file-label" for="customFile">Rasmlar <i class="anticon anticon-file-add"></i> </label>
-                        </div>
+               
                        
                         
                         <br>
-                        <h3>Product uchun videolar</h3>
+                        <h3>video qo'shish</h3>
                         <div class="custom-file" style="border: 1px solid #b3aeae; margin-bottom:30px; border-radius: 5px; height: 42px;" >
                             <input type="file" class="custom-file-input" id="customFile" name="videos" multiple>
                             <label class="custom-file-label" for="customFile">Videolar <i class="anticon anticon-file-add"></i></label>
@@ -153,7 +153,58 @@
         </div>
     </div>
     {% for image in images %}
+    <div class="modal fade" id="imgdelete{{forloop.counter}}">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Rasmni o'chirish</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <i class="anticon anticon-close"></i>
+                    </button>
+                </div>
+                <form method="post" action="{% url 'dashboard:image_delete' image.id %}">{% csrf_token %}
+                <div class="modal-body">
+                    <label for="inputPassword3" class="col-sm-2 col-form-label">Warning:</label>
+                    <div class="col-sm-10">
+                        <h5 >O'chirishga aminmisiz! </h5>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default" data-dismiss="modal">Yopish</button>
+                    <button type="submit" class="btn btn-danger">O'chirish</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
+    {% endfor %}
+
+    {% for video in videos %}
+    <div class="modal fade" id="videodelete{{forloop.counter}}">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Videoni o'chirish</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <i class="anticon anticon-close"></i>
+                    </button>
+                </div>
+                <form method="post  " action="{% url 'dashboard:video_delete' video.id %}">{% csrf_token %}
+                <div class="modal-body">
+                    <label for="inputPassword3" class="col-sm-2 col-form-label">Warning:</label>
+                    <div class="col-sm-10">
+                        <h5 >O'chirishga aminmisiz!</h5>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default" data-dismiss="modal">Yopish</button>
+                    <button type="submit" class="btn btn-danger">O'chirish</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
     {% endfor %}
     <!-- Content Wrapper END -->
 
