@@ -12,7 +12,7 @@ def index(request):
 
 # ---------CATEGORY-------------
 
-@login_required()
+# @login_required()
 def category_list(request):
     queryset = models.Category.objects.all()
 
@@ -22,7 +22,7 @@ def category_list(request):
     return render(request, 'dashboard/category/list.html', context)
 
 
-@login_required()
+# @login_required()
 def category_create(request):
     if request.method == 'POST':
         models.Category.objects.create(
@@ -32,7 +32,7 @@ def category_create(request):
     return render(request, 'dashboard/category/create.html')
 
 
-@login_required()
+# @login_required()
 def category_update(request, id):
     queryset = models.Category.objects.get(id=id)
     queryset.name = request.POST['name']
@@ -40,7 +40,7 @@ def category_update(request, id):
     return redirect('dashboard:category_list')
 
 
-@login_required()
+# @login_required()
 def category_delete(request, id):
     queryset = models.Category.objects.get(id=id)
     queryset.delete()
@@ -48,7 +48,7 @@ def category_delete(request, id):
 
 
 # ---------PRODUCT----------------
-@login_required()
+# @login_required()
 def product_list(request):
     categorys = models.Category.objects.all()
     category_id = request.GET.get('category_id')
@@ -66,7 +66,7 @@ def product_list(request):
     return render(request, 'dashboard/product/list.html', context)
 
 
-@login_required()
+# @login_required()
 def product_detail(request, code):
     queryset = models.Product.objects.get(code=code)
     images = models.ProductImg.objects.filter(product=queryset)
@@ -79,7 +79,7 @@ def product_detail(request, code):
     return render(request, 'dashboard/product/detail.html', context)
 
 
-@login_required()
+# @login_required()
 def product_create(request):
     categorys = models.Category.objects.all()
     context = {'categorys': categorys}
@@ -113,7 +113,7 @@ def product_create(request):
     return render(request, 'dashboard/product/create.html', context)
 
 
-@login_required()
+# @login_required()
 def product_update(request, code):
     product = models.Product.objects.get(code=code)
     categorys = models.Category.objects.all()
@@ -159,7 +159,7 @@ def product_update(request, code):
     return render(request, 'dashboard/product/update.html', context)
 
 
-@login_required()
+# @login_required()
 def product_delete(request, code):
     product = models.Product.objects.get(code=code)
     product.delete()
@@ -183,7 +183,7 @@ def video_delete(request, id):
 
 
 # ---------Settings----------------
-@login_required()
+@login_required(login_url='auth:sign-in')
 def profile_update(request):
     if request.method == 'POST':
         user = request.user
@@ -194,16 +194,17 @@ def profile_update(request):
         if request.FILES.get('avatar'):
             user.avatar = request.FILES['avatar']
         user.save()
-        return redirect('dashboard:index')
+        return redirect('front:index')
     return render(request, 'dashboard/setting.html', )
 
 
+@login_required(login_url='auth:sign-in')
 def edit_password(request):
     user = request.user
     password = request.POST.get('password')
     password_new = request.POST.get('password_new')
     password_conf = request.POST.get('password_conf')
-    if user.check_password(password) and password_new==password_conf:
+    if user.check_password(password) and password_new == password_conf:
         user.set_password(password_new)
         user.save()
-        return redirect('dashboard:index')
+        return redirect('front:index')

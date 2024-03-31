@@ -9,7 +9,7 @@ def sign_up(request):
         username = request.POST['username']
         email = request.POST['email']
         password = request.POST['password']
-        password_conf= request.POST['password_conf']
+        password_conf = request.POST['password_conf']
         if password == password_conf:
             User.objects.create_user(username=username, password=password, email=email)
 
@@ -17,11 +17,12 @@ def sign_up(request):
             if user:
                 login(request, user)
 
-            return redirect('dashboard:index')
+            return redirect('front:index')
         else:
             return redirect('auth:error')
 
-    return render(request,'dashboard/auth/sign-up.html')
+    return render(request, 'dashboard/auth/sign-up.html')
+
 
 def sign_in(request):
     if request.method == 'POST':
@@ -35,7 +36,7 @@ def sign_in(request):
 
         if user:
             login(request, user)
-            return redirect('dashboard:index')
+            return redirect('front:index')
 
         else:
             return redirect('auth:error')

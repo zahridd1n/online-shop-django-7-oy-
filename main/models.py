@@ -1,6 +1,27 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from main.func import code_generate
+from random import sample
+import string
+
+
+class CodeGenerate(models.Model):
+    code = models.CharField(max_length=255, blank=True, unique=True)
+
+    @staticmethod
+    def generate_code():
+        return ''.join(sample(string.ascii_letters, 15))
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            while True:
+                code = self.generate_code()
+                if not self.__class__.objects.filter(code=code).count():
+                    self.code = code
+                    break
+        super(CodeGenerate, self).save(*args, **kwargs)
+
+    class Meta:
+        abstract = True
 
 
 class User(AbstractUser):
@@ -20,8 +41,7 @@ class Category(models.Model):
         return self.name
 
 
-class Product(models.Model):
-    code = models.CharField(max_length=255, blank=True, unique=True)
+class Product(CodeGenerate):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     body = models.TextField()
@@ -31,11 +51,6 @@ class Product(models.Model):
     banner_img = models.ImageField(upload_to='banner-img')
     quantity = models.IntegerField()
     delivery = models.BooleanField(default=False)  # +
-
-    def save(self, *args, **kwargs):
-        if not self.id:
-            self.code = code_generate()
-        super(Product, self).save(*args, **kwargs)
 
 
 class ProductImg(models.Model):
@@ -61,7 +76,7 @@ class Review(models.Model):
         mark = self.mark
         text = self.text
 
-        if 0<mark<=5:
+        if 0 < mark <= 5:
             try:
                 existing_review = Review.objects.get(user=user, product=product)
                 existing_review.mark = mark
@@ -71,15 +86,50 @@ class Review(models.Model):
                 super(Review, self).save(*args, **kwargs)
 
 
-class Cart(models.Model):
+class Cart(CodeGenerate):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     is_active = models.BooleanField(default=True)
+    order_date = models.DateField(null=True, blank=True)
+
+    @property
+    def total(self):
+        count = 0
+        queryset = CartProduct.objects.filter(cart=self)
+        for item in queryset:
+            count += item.count
+        return count
+
+    @property
+    def price(self):
+        queryset = CartProduct.objects.filter(cart=self)
+        total = 0
+        for item in queryset:
+            if item.product.discount_price:
+                total += item.count * item.product.discount_price
+            else:
+                total += item.count * item.product.price
+        return total
+
+    @property
+    def total_price(self):
+        queryset = CartProduct.objects.filter(cart=self)
+        total = 0
+        for item in queryset:
+            total += item.count * item.product.price
+        return total
 
 
 class CartProduct(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     count = models.IntegerField()
+
+    @property
+    def price(self):
+        if self.product.discount_price:
+            return self.count * self.product.discount_price
+        else:
+            return self.count * self.product.price
 
 
 class WishList(models.Model):

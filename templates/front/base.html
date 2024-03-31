@@ -27,6 +27,11 @@
 
     <!-- Style CSS -->
     <link rel="stylesheet" href="{% static 'front/assets/css/style.css' %}">
+    <style>
+        #buyurtma-berish:hover{
+            background-color: #ABD373;
+        }
+    </style>
 
 </head>
 
@@ -106,9 +111,14 @@
                                                 <i class="pe-7s-users"></i>
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="settingButton">
-                                                <li><a class="dropdown-item" href="my-account.html">My account</a></li>
-                                                <li><a class="dropdown-item" href="login-register.html">Login | Register</a>
+                                                <li><a class="dropdown-item" href="{% url 'dashboard:profile_update' %}">My account</a></li>
+                                                {% if user.username %}
+                                                <li><a class="dropdown-item" href="{% url 'auth:log-out' %}">Log out</a>
+                                                 {% else %}
+                                                <li><a class="dropdown-item" href="{% url 'auth:sign-in' %}">Login | Register</a>
+                                                {% endif %}
                                                 </li>
+
                                             </ul>
                                         </li>
                                         <li class="d-none d-lg-block">
@@ -116,10 +126,11 @@
                                                 <i class="pe-7s-like"></i>
                                             </a>
                                         </li>
-                                        <li class="minicart-wrap me-3 me-lg-0">
-                                            <a href="#miniCart" class="minicart-btn toolbar-btn">
+
+                                        <li class="d-none d-lg-block">
+                                            <a class="minicart-btn" href="{% url 'front:cart_active' %}">
                                                 <i class="pe-7s-shopbag"></i>
-                                                <span class="quantity">3</span>
+                                                <span class="quantity">{{cart | length}}</span>
                                             </a>
                                         </li>
                                         <li class="mobile-menu_wrap d-block d-lg-none">
@@ -163,23 +174,20 @@
                                               
                                             </ul>
                                         </li>
+                        
                                         <li class="drop-holder">
-                                            <a href="{% url 'front:cart' %}">Cart</a>
-                                          
+                                            <a href="#">Cart</a>
+                                            <ul class="drop-menu">
+                                                <li>
+                                                    <a href="{% url 'front:cart_active' %}">Cart</a>
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'front:cart_list' %}">Cart list(arxiv)</a>
+                                                </li>
+                                            </ul>
                                         </li>
                                         <li>
                                             <a href="about.html">About Us</a>
-                                        </li>
-                                        <li class="drop-holder">
-                                            <a href="#">Pages</a>
-                                            <ul class="drop-menu">
-                                                <li>
-                                                    <a href="faq.html">FAQ</a>
-                                                </li>
-                                                <li>
-                                                    <a href="404.html">Error 404</a>
-                                                </li>
-                                            </ul>
                                         </li>
                                         <li>
                                             <a href="contact.html">Contact Us</a>
@@ -229,22 +237,18 @@
                                                 </ul>
                                             </li>
                                             <li class="drop-holder">
-                                                <a href="{% url 'front:cart' %}">Cart</a>
-                                              
+                                                <a href="#">Cart</a>
+                                                <ul class="drop-menu">
+                                                    <li>
+                                                        <a href="{% url 'front:cart_active' %}">Cart</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{% url 'front:cart_list' %}">Cart list(arxiv)</a>
+                                                    </li>
+                                                </ul>
                                             </li>
                                             <li>
                                                 <a href="about.html">About Us</a>
-                                            </li>
-                                            <li class="drop-holder">
-                                                <a href="#">Pages</a>
-                                                <ul class="drop-menu">
-                                                    <li>
-                                                        <a href="faq.html">FAQ</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="404.html">Error 404</a>
-                                                    </li>
-                                                </ul>
                                             </li>
                                             <li>
                                                 <a href="contact.html">Contact Us</a>
@@ -262,13 +266,18 @@
                                             </a>
                                         </li>
                                         <li class="dropdown d-none d-lg-block">
-                                            <button class="btn btn-link dropdown-toggle ht-btn p-0" type="button" id="stickysettingButton" data-bs-toggle="dropdown" aria-label="setting" aria-expanded="false">
+                                            <button class="btn btn-link dropdown-toggle ht-btn p-0" type="button" id="settingButton" data-bs-toggle="dropdown" aria-label="setting" aria-expanded="false">
                                                 <i class="pe-7s-users"></i>
                                             </button>
-                                            <ul class="dropdown-menu" aria-labelledby="stickysettingButton">
-                                                <li><a class="dropdown-item" href="my-account.html">My account</a></li>
-                                                <li><a class="dropdown-item" href="login-register.html">Login | Register</a>
+                                            <ul class="dropdown-menu" aria-labelledby="settingButton">
+                                                <li><a class="dropdown-item" href="{% url 'dashboard:profile_update' %}">My account</a></li>
+                                                {% if user.username %}
+                                                <li><a class="dropdown-item" href="{% url 'auth:log-out' %}">Log out</a>
+                                                 {% else %}
+                                                <li><a class="dropdown-item" href="{% url 'auth:sign-in' %}">Login | Register</a>
+                                                {% endif %}
                                                 </li>
+
                                             </ul>
                                         </li>
                                         <li class="d-none d-lg-block">
@@ -276,12 +285,17 @@
                                                 <i class="pe-7s-like"></i>
                                             </a>
                                         </li>
-                                        <li class="minicart-wrap me-3 me-lg-0">
-                                            <a href="#miniCart" class="minicart-btn toolbar-btn">
+                                        <li class="d-none d-lg-block">
+                                            <a class="minicart-btn" href="{% url 'front:cart_active' %}">
                                                 <i class="pe-7s-shopbag"></i>
-                                                <span class="quantity">3</span>
+                                                <span class="quantity">{{cart | length}}</span>
                                             </a>
                                         </li>
+                                        <!-- <li class="minicart-wrap me-3 me-lg-0">
+                                            <a href="" class="minicart-btn toolbar-btn">
+    
+                                            </a>
+                                        </li> -->
                                         <li class="mobile-menu_wrap d-block d-lg-none">
                                             <a href="#mobileMenu" class="mobile-menu_btn toolbar-btn pl-0">
                                                 <i class="pe-7s-menu"></i>
@@ -953,6 +967,7 @@
     <!--Main JS (Common Activation Codes)-->
     <script src="{% static 'front/assets/js/main.js' %}"></script>
 
+    
 </body>
 
 </html>
