@@ -86,12 +86,20 @@
                                             cart</a>
                                     </li>
                                     <li class="wishlist-btn-wrap">
-                                        <a class="custom-circle-btn" href="wishlist.html">
-                                            <i class="pe-7s-like"></i>
+                                        {% if wishlist.product.code == product.code %}
+                                        <a class="custom-circle-btn" href="{% url 'front:wishlist_delete' product.code %}">
+                                            <i class="fa fa-heart"></i>
+                                            
                                         </a>
+                                        {% else %}
+                                        <a class="custom-circle-btn" href="{% url 'front:wishlist_add' product.code %}">
+                                            <i class="pe-7s-like"></i>
+                                            
+                                        </a>
+                                        {% endif %}
                                     </li>
                                     <li class="compare-btn-wrap">
-                                        <a class="custom-circle-btn" href="compare.html">
+                                        <a class="custom-circle-btn" href="#">
                                             <i class="pe-7s-refresh-2"></i>
                                         </a>
                                     </li>
@@ -123,10 +131,10 @@
                                     </li>
                                 </ul>
                                 <div class="product-category">
-                                    <span class="title">SKU:</span>
+                                    <span class="title">Soni:</span>
                                     <ul>
                                         <li>
-                                            <a href="#">Ch-256xl</a>
+                                            <a href="#">{{product.quantity}}</a>
                                         </li>
                                     </ul>
                                 </div>

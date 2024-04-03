@@ -3,8 +3,10 @@ from main import models
 from decimal import Decimal
 from django.contrib.auth.decorators import login_required
 from main.models import User
+from main.func import staff_required
 
 
+@staff_required
 def index(request):
     context = {}
     return render(request, 'dashboard/index.html', context)
@@ -12,7 +14,7 @@ def index(request):
 
 # ---------CATEGORY-------------
 
-# @login_required()
+@staff_required
 def category_list(request):
     queryset = models.Category.objects.all()
 
@@ -22,7 +24,7 @@ def category_list(request):
     return render(request, 'dashboard/category/list.html', context)
 
 
-# @login_required()
+@staff_required
 def category_create(request):
     if request.method == 'POST':
         models.Category.objects.create(
@@ -32,7 +34,7 @@ def category_create(request):
     return render(request, 'dashboard/category/create.html')
 
 
-# @login_required()
+@staff_required
 def category_update(request, id):
     queryset = models.Category.objects.get(id=id)
     queryset.name = request.POST['name']
@@ -40,7 +42,7 @@ def category_update(request, id):
     return redirect('dashboard:category_list')
 
 
-# @login_required()
+@staff_required
 def category_delete(request, id):
     queryset = models.Category.objects.get(id=id)
     queryset.delete()
@@ -48,7 +50,7 @@ def category_delete(request, id):
 
 
 # ---------PRODUCT----------------
-# @login_required()
+@staff_required
 def product_list(request):
     categorys = models.Category.objects.all()
     category_id = request.GET.get('category_id')
@@ -66,7 +68,7 @@ def product_list(request):
     return render(request, 'dashboard/product/list.html', context)
 
 
-# @login_required()
+@staff_required
 def product_detail(request, code):
     queryset = models.Product.objects.get(code=code)
     images = models.ProductImg.objects.filter(product=queryset)
@@ -79,7 +81,7 @@ def product_detail(request, code):
     return render(request, 'dashboard/product/detail.html', context)
 
 
-# @login_required()
+@staff_required
 def product_create(request):
     categorys = models.Category.objects.all()
     context = {'categorys': categorys}
@@ -113,7 +115,7 @@ def product_create(request):
     return render(request, 'dashboard/product/create.html', context)
 
 
-# @login_required()
+@staff_required
 def product_update(request, code):
     product = models.Product.objects.get(code=code)
     categorys = models.Category.objects.all()
@@ -159,7 +161,7 @@ def product_update(request, code):
     return render(request, 'dashboard/product/update.html', context)
 
 
-# @login_required()
+@staff_required
 def product_delete(request, code):
     product = models.Product.objects.get(code=code)
     product.delete()
@@ -180,6 +182,71 @@ def video_delete(request, id):
     video.delete()
 
     return redirect('dashboard:product_update', video.product.id)
+
+
+# ---------Enter product----------------
+
+def enter_product_create(request):
+    context = {'product': models.Product.objects.all()}
+    if request.method == 'POST':
+        product = models.Product.objects.get(code=request.POST.get('code'))
+        quantity = request.POST.get('quantity')
+        quantity = int(quantity)
+        # product = request.POST.get('product')
+        models.EnterProduct.objects.create(
+            product=product,
+            quantity=quantity,
+        )
+    return render(request, 'dashboard/enterproduct/create.html', context)
+
+
+@staff_required
+def enter_product_update(request, code):
+    context = {
+        'queryset': models.EnterProduct.objects.get(code=code),
+        'products': models.Product.objects.all()
+    }
+
+    if request.method == 'POST':
+        product = request.POST.get('product_id')
+        quantity = request.POST.get('quantity')
+        quantity = int(quantity)
+        a = models.EnterProduct.objects.get(code=code)
+        a.product_id = product
+        a.quantity = quantity
+        a.save()
+        return redirect('dashboard:enter_product_list')
+    return render(request, 'dashboard/enterproduct/update.html', context)
+
+
+@staff_required
+def enter_product_list(request):
+    queryset = models.EnterProduct.objects.all()
+    context = {
+        'queryset': queryset
+    }
+    return render(request, 'dashboard/enterproduct/list.html', context)
+
+
+# def enter_product_detail(request, code):
+#     queryset = models.EnterProduct.objects.get(code=code)
+#     context = {
+#         'queryset': queryset
+#     }
+#     return render(request, 'dashboard/enterproduct/detail.html', context)
+
+@staff_required
+def enter_product_history(request, code):
+    kirim = models.EnterProduct.objects.filter(product__code=code)
+    chiqim = models.Cart.objects.filter(user=request.user, is_active=False)
+    kirim.union(chiqim)
+    sorted(kirim, key=lambda k: k.date, reverse=True)
+    context = {
+        'queryset': kirim
+    }
+
+
+    return render(request, 'dashboard/enterproduct/detil.html', context)
 
 
 # ---------Settings----------------

@@ -2,15 +2,18 @@ from django.shortcuts import render, redirect
 from main import models
 from django.contrib.auth.decorators import login_required
 
+
 @login_required(login_url='auth:sign-in')
 def index(request):
     categorys = models.Category.objects.all()
     products = models.Product.objects.all()
     cart = models.Cart.objects.get_or_create(user=request.user, is_active=True)
+    wishlist = models.WishList.objects.filter(user=request.user)
 
     context = {
         'categorys': categorys,
         'products': products,
+        'wishlist': wishlist,
         'cart': cart,
 
     }
@@ -22,11 +25,13 @@ def category_list(request, id):
     catg = models.Category.objects.get(id=id)
     products = models.Product.objects.filter(category=catg)
     cart = models.Cart.objects.get_or_create(user=request.user, is_active=True)
+    wishlist = models.WishList.objects.filter(user=request.user)
     context = {
         'categorys': categorys,
         'products': products,
         'categor': catg,
         'cart': cart,
+        'wishlist': wishlist,
 
     }
 
@@ -39,6 +44,9 @@ def product_detail(request, code):
     images = models.ProductImg.objects.filter(product=product.id)
     reviews = models.Review.objects.filter(product=product.id)
     cart = models.Cart.objects.get_or_create(user=request.user, is_active=True)
+    wishlist = models.WishList.objects.filter(product=product, user=request.user)
+    if wishlist:
+        wishlist = wishlist[0]
     # videos = models.ProductVideo.objects.filter(product=product)
     print(images)
     context = {
@@ -46,6 +54,7 @@ def product_detail(request, code):
         'product': product,
         'images': images,
         'reviews': reviews,
+        'wishlist': wishlist,
         'cart': cart,
         # 'videos': videos,
     }
@@ -95,6 +104,7 @@ def nima(request, id):
         return redirect('front:cart', cart_product.cart.code)
 
 
+@login_required(login_url='auth:sign-in')
 def cart_product_delete(request, id):
     cart_product = models.CartProduct.objects.get(id=id)
     cart_product.delete()
@@ -107,7 +117,7 @@ def add_cart_product(request, code):
     count = 1
     if models.CartProduct.objects.filter(product=product, cart=cart).count():
         c = models.CartProduct.objects.get(product=product, cart=cart)
-        c.count +=1
+        c.count += 1
         c.save()
     else:
         p = models.CartProduct.objects.create(
@@ -126,3 +136,35 @@ def product_order(request):
     cart.save()
 
     return redirect('front:cart_list')
+
+
+@login_required(login_url='auth:sign-in')
+def wishlist(request):
+    categorys = models.Category.objects.all()
+    queryset = models.WishList.objects.filter(user=request.user)
+
+    context = {
+        'categorys': categorys,
+        'queryset': queryset,
+    }
+
+    return render(request, 'front/wishlist.html', context)
+
+
+@login_required(login_url='auth:sign-in')
+def wishlist_delete(request, code):
+    wishlist = models.WishList.objects.get(product__code=code, user=request.user)
+    if wishlist:
+        wishlist.delete()
+    else:
+        pass
+    # return redirect('front:wishlist')
+    return redirect(request.META.get('HTTP_REFERER', 'front:wishlis'))
+
+
+@login_required(login_url='auth:sign-in')
+def wishlist_add(request, code):
+    product = models.Product.objects.get(code=code)
+    models.WishList.objects.create(product=product, user=request.user)
+    # return redirect('front:wishlist')
+    return redirect(request.META.get('HTTP_REFERER', 'front:wishlis'))

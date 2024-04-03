@@ -97,6 +97,7 @@
                             <div class="tab-pane fade show active" id="featured" role="tabpanel" aria-labelledby="featured-tab">
                                 <div class="product-item-wrap row">
                                     {% for product in products %}
+                                    
                                     <div class="col-lg-3 col-md-4 col-sm-6">
                                         <div class="product-item">
                                             <div class="product-img">
@@ -107,9 +108,24 @@
                                                 <div class="product-add-action">
                                                     <ul>
                                                         <li>
-                                                            <a href="wishlist.html" data-tippy="Add to wishlist" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
+                                                            {% for wish in wishlist %}
+                                                            {% if product.code == wish.product.code %}
+                                                            <a href="{% url 'front:wishlist_delete' product.code %}" data-tippy="Add to wishlist" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
+                                                                <i class="fa fa-heart"></i>
+                                                            </a>
+                                                            {% else %}
+                                                            <a href="{% url 'front:wishlist_add' product.code %}" data-tippy="Add to wishlist" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
                                                                 <i class="pe-7s-like"></i>
                                                             </a>
+
+                                                            {% endif %}
+                                                            {% endfor %}
+                                                            {% if wishlist|length == 0 %}
+                                                            <a href="{% url 'front:wishlist_add' product.code %}" data-tippy="Add to wishlist" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
+                                                                <i class="pe-7s-like"></i>
+                                                            </a>
+                                                            {% endif %}
+
                                                         </li>
                                                         <li >
                                                             <a href="{% url 'front:product_detail' product.code %}" data-tippy="Quickview" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">

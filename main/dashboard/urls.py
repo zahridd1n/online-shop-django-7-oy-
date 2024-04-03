@@ -19,6 +19,14 @@ urlpatterns = [
     path('image-delete/<int:id>/', views.image_delete, name='image_delete'),
     path('video-delete/<int:id>/', views.video_delete, name='video_delete'),
 
+    # ------EnterProduct--------
+    path('enter-product-create/', views.enter_product_create, name='enter_product_create'),
+    path('enter-product-list/', views.enter_product_list, name='enter_product_list'),
+    path('enter-product-detail/<str:code>/', views.enter_product_history, name='enter_product_detail'),
+    path('enter-product-update/<str:code>/', views.enter_product_update, name='enter_product_update'),
+
+
+
     path('profile_update/', views.profile_update, name='profile_update'),
     path('edit_password/', views.edit_password, name='edit_password'),
 ]

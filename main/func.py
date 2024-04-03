@@ -1,7 +1,11 @@
-import random
-import string
+from django.shortcuts import redirect
 
 
-def code_generate():
-    code = "".join(random.sample(string.ascii_letters, 14))
-    return code
+def staff_required(func):
+    def wrapper(request, *args, **kwargs):
+        if request.user.is_staff:
+            return func(request, *args, **kwargs)
+        else:
+            return redirect("front:index")
+
+    return wrapper

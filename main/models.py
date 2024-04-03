@@ -52,6 +52,32 @@ class Product(CodeGenerate):
     quantity = models.IntegerField()
     delivery = models.BooleanField(default=False)  # +
 
+    def __str__(self):
+        return self.name
+
+    @property
+    def stock_status(self):
+        return bool(self.quantity)
+
+
+class EnterProduct(CodeGenerate):
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    quantity = models.IntegerField()
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.product.name
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            obj = EnterProduct.objects.get(pk=self.pk)
+            self.product.quantity = self.product.quantity - obj.quantity
+
+        self.product.quantity = self.product.quantity + self.quantity
+        self.product.save()
+
+        super(EnterProduct, self).save(*args, **kwargs)
+
 
 class ProductImg(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -89,7 +115,7 @@ class Review(models.Model):
 class Cart(CodeGenerate):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     is_active = models.BooleanField(default=True)
-    order_date = models.DateField(null=True, blank=True)
+    date = models.DateField(null=True, blank=True)
 
     @property
     def total(self):
@@ -136,7 +162,8 @@ class WishList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
-    # def save(self, *args, **kwargs):
-    #     if WishList.objects.filter(user=self.user, product=self.product).count():
-    #         raise ValueError('Ma`lumot bor')
-    #     super(WishList, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        obj = WishList.objects.filter(user=self.user, product=self.product)
+        if obj.count():
+            raise ValueError('Ma`lumot bor')
+        super(WishList, self).save(*args, **kwargs)
