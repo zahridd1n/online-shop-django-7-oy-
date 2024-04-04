@@ -10,14 +10,11 @@ def index(request):
     cart = models.Cart.objects.get_or_create(user=request.user, is_active=True)
     wishlist = models.WishList.objects.filter(user=request.user)
 
-    # products bu list, bu listni ichida esa dict elementlari bor, deb tasvvur qilamiz
     wishlisted_codes = [item.product.code for item in wishlist]
     # print(wishlisted_codes)
     for product in products:
         v = product.code in wishlisted_codes
         setattr(product, 'is_wishlisted', v)
-
-    # template ichida product’dagi is_wishlisted ni tekshirib qo’ysez yetadi, for loop shartmas
 
     context = {
         'categorys': categorys,
