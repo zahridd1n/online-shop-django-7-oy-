@@ -245,8 +245,7 @@ def enter_product_history(request, code):
         'queryset': kirim
     }
 
-
-    return render(request, 'dashboard/enterproduct/detil.html', context)
+    return render(request, 'dashboard/enterproduct/detail.html', context)
 
 
 # ---------Settings----------------

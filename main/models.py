@@ -68,6 +68,16 @@ class EnterProduct(CodeGenerate):
     def __str__(self):
         return self.product.name
 
+    @property
+    def enterprice(self):
+        price = 0
+        if self.product.discount_price:
+            price = self.product.discount_price*self.quantity
+
+        else:
+            price = self.product.price*self.quantity
+        return price
+
     def save(self, *args, **kwargs):
         if self.pk:
             obj = EnterProduct.objects.get(pk=self.pk)
