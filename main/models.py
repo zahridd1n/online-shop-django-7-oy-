@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from datetime import datetime
 from random import sample
 import string
 
@@ -72,10 +73,10 @@ class EnterProduct(CodeGenerate):
     def enterprice(self):
         price = 0
         if self.product.discount_price:
-            price = self.product.discount_price*self.quantity
+            price = self.product.discount_price * self.quantity
 
         else:
-            price = self.product.price*self.quantity
+            price = self.product.price * self.quantity
         return price
 
     def save(self, *args, **kwargs):
@@ -124,8 +125,21 @@ class Review(models.Model):
 
 class Cart(CodeGenerate):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    is_active = models.BooleanField(default=True)
-    date = models.DateField(null=True, blank=True)
+    status = models.IntegerField(
+        choices=(
+            (1, 'No Faol'),
+            (2, "Yo'lda"),
+            (3, 'Qaytarilgan'),
+            (4, 'Qabul qilingan')
+        ),
+        default=1
+    )
+    date = models.DateField(null=True, blank=True, auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if self.status == 2 and Cart.objects.get(id=self.id).status == 1:
+            self.order_date = datetime.now()
+        super(Cart, self).save(*args, **kwargs)
 
     @property
     def total(self):

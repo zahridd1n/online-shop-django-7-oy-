@@ -53,7 +53,7 @@
                                         </td>
                                         <td class="product-name"><a href="#">{{i.product.name}}</a></td>
                                         <td class="product-price"><span class="amount">{{i.product.price}}</span></td>
-                                        {% if cart.is_active %}
+                                        {% if cart.status == 1 %}
                                         <td class="quantity">
                                             <form method="post" action="{% url 'front:nima' i.id %}">{% csrf_token %}
                                                 <div class="cart-plus-minus">
@@ -80,13 +80,18 @@
                                 </tbody>
                             </table>
                         </div>
-                        {% if cart.is_active %}
+                        {% if cart.status == 1 and queryset|length != 0 %}
                         <div class="row">
                             <div class="col-12">
                                 
                                 <div class="coupon-all">
                                     <div class="coupon2">
-                                        <a href="{% url 'front:product_order' %}" class="btn btn-secondary" id="buyurtma-berish"> Buyurtma berish </a>
+                  
+                                        <div data-bs-toggle="modal" data-bs-target="#quickModal">
+                                            <a href="#" class="btn btn-secondary" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
+                                                Buyurtma berish
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             
@@ -111,5 +116,34 @@
         </div>
     </div>
 </main>
+        <!-- Begin Modal Area -->
+        <div class="modal quick-view-modal fade" id="quickModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="quickModal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered d-flex justify-content-center">
+                <div class="modal-content" style="width: 430px; height: 280px;">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="quickModal">Buyurtmani tasdiqlash</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-tippy="Close" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
+                        </button>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <div class="modal-wrap row">
+                            <h5>Tavarlar turi: <span>{{queryset|length }}</span></h5><br>
+                            <h5>To'lo'v summasi: <span>{{ cart.price }}</span></h5><br><br><br>
+                            
+                            <div  style="display: flex;justify-content: space-around ;">
+                                <button  type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close" data-tippy="Close" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
+                                    Ortga
+                                </button>
+                                
+                                <a href="{% url 'front:product_order' %}" class="btn btn-secondary" id="buyurtma-berish"> Buyurtma berish </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Area End Here -->
+
 {% endblock content %}
     
