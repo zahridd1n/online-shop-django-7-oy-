@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Enlink - Admin Dashboard Template</title>
+    <title>Pronia admin</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="{% static 'dashboard/images/logo/favicon.png' %}">
@@ -44,6 +44,13 @@
                         <li class="mobile-toggle">
                             <a href="javascript:void(0);">
                                 <i class="anticon"></i>
+                            </a>
+                           
+                        </li>
+                        <li>
+                            <a href="{% url 'front:index' %}">
+                                <i class="anticon anticon-home"></i>
+                                <span>Front</span>
                             </a>
                         </li>
                     </ul>
@@ -180,7 +187,7 @@
                                     <a href="{% url 'dashboard:enter_product_create' %}">Product qo'shish</a>
                                 </li>
                                 <li class="">
-                                    <a href="{% url 'dashboard:enter_product_list' %}">ProductEnter list </a>
+                                    <a href="{% url 'dashboard:enter_product_list' %}">ProductEnter ro'yxat </a>
                                 </li>
                            
                               
@@ -199,10 +206,9 @@
                 <!-- Footer START -->
                 <footer class="footer">
                     <div class="footer-content">
-                        <p class="m-b-0">Copyright © 2019 Theme_Nate. All rights reserved.</p>
+                        <p class="m-b-0">zahridd1n © 2019 Paronia Admin sahifasi</p>
                         <span>
-                            <a href="" class="text-gray m-r-15">Term &amp; Conditions</a>
-                            <a href="" class="text-gray">Privacy &amp; Policy</a>
+                            <a href="https://t.me/zahridd1n" class="text-gray m-r-15"><i class="fab fa-telegram"></i> Xato  &amp; Kamchliklar uchun murojat </a>
                         </span>
                     </div>
                 </footer>

@@ -8,7 +8,14 @@ from main.func import staff_required
 
 @staff_required
 def index(request):
-    context = {}
+    products = models.Product.objects.all()
+    category = models.Category.objects.all()
+
+    context = {
+        'products': products,
+        'category': category,
+    }
+
     return render(request, 'dashboard/index.html', context)
 
 

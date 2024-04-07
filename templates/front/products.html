@@ -1,6 +1,7 @@
 {% extends 'front/base.html' %}
 {% block content  %}
 {% load static %}
+
         <!-- Begin Main Content Area -->
         <main class="main-content">
             <div class="breadcrumb-area breadcrumb-height" data-bg-image="{% static 'front/assets/images/breadcrumb/bg/1-1-1919x388.jpg' %}">
@@ -8,12 +9,12 @@
                     <div class="row h-100">
                         <div class="col-lg-12">
                             <div class="breadcrumb-item">
-                                <h2 class="breadcrumb-heading">Maxsulotlar</h2>
+                                <h2 class="breadcrumb-heading">Mahsulotlar</h2>
                                 <ul>
                                     <li>
                                         <a href="{% url 'front:index' %}">Asosiy</a>
                                     </li>
-                                    <li>Kategorya maxsulotlari</li>
+                                    <li>Maxsulotlar</li>
                                 </ul>
                             </div>
                         </div>
@@ -23,11 +24,123 @@
             <div class="shop-area section-space-y-axis-100">
                 <div class="container">
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-xl-3 col-lg-4 order-2 order-lg-1 pt-5 pt-lg-0">
+                            <form>
+                                <div class="sidebar-area">
+                                <div class="widgets-searchbox" style="margin: 0;">
+                                    <div id="widgets-searchbox">
+                                        <input class="input-field" type="text" name="name" placeholder="Qidiruv...">
+                                        <button class="widgets-searchbox-btn" type="submit">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="widgets-item widgets-filter" style="margin: 10px;">
+                                    <h2 class="widgets-title mb-4">Narxi, so'm</h2>
+                                    
+                                    <label for="min_price">dan:</label>
+                                    <input type="number" name="min_price"  id="min_price" class="form-control">
+                                    
+                                    <label for="max_price">gacha:</label>
+                                    <input type="number" name="max_price" id="max_price" class="form-control" placeholder="">
+
+                                   
+                                </div>
+                                <!-- <div class="widgets-item widgets-filter">
+                                    <h2 class="widgets-title mb-4">Price Filter</h2>
+                                    <div class="price-filter">
+                                        <input type="text" class="pronia-range-slider"  value=""  data-grid="false" />
+                                    
+                                    </div>
+                                    
+                                </div> -->
+                                <div class="widgets-area">
+                                    <div class="widgets-item pt-0">
+                                        <h2 class="widgets-title mb-4">Kategoriyalar</h2>
+                                        <ul class="widgets-category">
+                                            <select name="category_id" class="form-control is-valid text-white" style="background-color: #ABD373;">
+                                                <option value="0">Barchasi</option>
+                                                {% for category in categorys %}
+                                                <option value="{{category.id}}"><i class="fa fa-chevron-right"></i>{{category.name}}</option>
+                                                {% endfor %}
+                                            </select>
+             
+                                        </ul>
+                                    </div>
+                                    <div class="button-wrap d-flex justify-content-center" style="margin-top: 20px;">
+                                        <button type="submit" class="btn btn-custom-size lg-size btn-pronia-primary">Filterlash</button>
+                                    </div>
+                                  
+                                    <!-- <div class="widgets-item">
+                                        <h2 class="widgets-title mb-4">Color</h2>
+                                        <ul class="widgets-category widgets-color">
+                                            <li>
+                                                <a href="#">
+                                                    <i class="fa fa-chevron-right"></i>
+                                                    All <span>(65)</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#">
+                                                    <i class="fa fa-chevron-right"></i>
+                                                    Gold <span>(12)</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#">
+                                                    <i class="fa fa-chevron-right"></i>
+
+                                                    Green <span>(22)</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#">
+                                                    <i class="fa fa-chevron-right"></i>
+                                                    white <span>(13)</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#">
+                                                    <i class="fa fa-chevron-right"></i>
+                                                    Black <span>(10)</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div> -->
+<!-- 
+                                    <div class="widgets-item">
+                                        <h2 class="widgets-title mb-4">Populer Tags</h2>
+                                        <ul class="widgets-tag">
+                                            <li>
+                                                <a href="#">Fashion</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Organic</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Old Fashion</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Men</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Fashion</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Dress</a>
+                                            </li>
+                                        </ul>
+                                    </div> -->
+                                </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-xl-9 col-lg-8 order-1 order-lg-2">
                             <div class="product-topbar">
                                 <ul>
                                     <li class="page-count">
-                                        <span>{{products|length}}</span> ta maxsulot topildi<span></span>
+                                        <span>{{products|length}}</span> ta mahsulot topildi <span></span>
                                     </li>
                                     <li class="product-view-wrap">
                                         <ul class="nav" role="tablist">
@@ -43,14 +156,23 @@
                                             </li>
                                         </ul>
                                     </li>
-                        
+                                    <!-- <li class="short">
+                                        <select class="nice-select">
+                                            <option value="1">Sort by Default</option>
+                                            <option value="2">Sort by Popularity</option>
+                                            <option value="3">Sort by Rated</option>
+                                            <option value="4">Sort by Latest</option>
+                                            <option value="5">Sort by High Price</option>
+                                            <option value="6">Sort by Low Price</option>
+                                        </select>
+                                    </li> -->
                                 </ul>
                             </div>
                             <div class="tab-content">
                                 <div class="tab-pane fade show active" id="grid-view" role="tabpanel" aria-labelledby="grid-view-tab">
                                     <div class="product-grid-view row g-y-20">
                                         {% for product in products %}
-                                        <div class="col-lg-3 col-md-4 col-sm-6">
+                                        <div class="col-lg-4 col-md-4 col-sm-6">
                                             <div class="product-item">
                                                 <div class="product-img">
                                                     <a href="{% url 'front:product_detail' product.code %}">
@@ -183,4 +305,5 @@
             </div>
         </main>
         <!-- Main Content Area End Here -->
-{% endblock %}
+
+{%  endblock %}

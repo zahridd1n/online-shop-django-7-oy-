@@ -54,7 +54,7 @@
                     <div class="row align-items-center">
                         <div class="col-6">
                             <div class="header-top-left">
-                                <span class="pronia-offer">HELLO EVERYONE! 25% Off All Products</span>
+                                <span class="pronia-offer">Paronia oline do'koni</span>
                             </div>
                         </div>
                         <div class="col-6">
@@ -126,7 +126,7 @@
                                                 {% if user.is_staff %}
                                                 <li><a class="dropdown-item" href="{% url 'dashboard:index' %}">Dashboard</a></li>
                                                 {% endif %}
-                                                <li><a class="dropdown-item" href="{% url 'dashboard:profile_update' %}">My account</a></li>
+                                                <li><a class="dropdown-item" href="{% url 'dashboard:profile_update' %}">Akauntim</a></li>
                                                 {% if user.username %}
                                                 <li><a class="dropdown-item" href="{% url 'auth:log-out' %}">Log out</a>
                                                  {% else %}
@@ -156,11 +156,15 @@
                                 <nav class="main-nav">
                                     <ul>
                                         <li class="drop-holder">
-                                            <a href="{% url 'front:index' %}">Home</a>
+                                            <a href="{% url 'front:index' %}">Asosiy</a>
+                                          
+                                        </li>
+                                        <li class="drop-holder">
+                                            <a href="{% url 'front:product_list' %}">Mahsulotlar</a>
                                           
                                         </li>
                                         <li class="megamenu-holder">
-                                            <a href="shop.html">Category</a>
+                                            <a href="shop.html">Kategorya</a>
                                             <ul class="drop-menu megamenu">
                                                 <li>
                                                     <span class="title">Categoryyalar</span>
@@ -179,21 +183,18 @@
                                         </li>
                         
                                         <li class="drop-holder">
-                                            <a href="#">Cart</a>
+                                            <a href="#">Savat</a>
                                             <ul class="drop-menu">
                                                 <li>
-                                                    <a href="{% url 'front:cart_active' %}">Cart</a>
+                                                    <a href="{% url 'front:cart_active' %}">Savat</a>
                                                 </li>
                                                 <li>
-                                                    <a href="{% url 'front:cart_list' %}">Cart list(arxiv)</a>
+                                                    <a href="{% url 'front:cart_list' %}">Savatlar tarixi</a>
                                                 </li>
                                             </ul>
                                         </li>
                                         <li>
                                             <a href="{% url 'front:order_list' %}">Buyurtmalar</a>
-                                        </li>
-                                        <li>
-                                            <a href="contact.html">Contact Us</a>
                                         </li>
                                     </ul>
                                 </nav>
@@ -218,14 +219,18 @@
                                     <nav class="main-nav">
                                         <ul>
                                             <li class="drop-holder">
-                                                <a href="{% url 'front:index' %}">Home</a>
+                                                <a href="{% url 'front:index' %}">Asosiy</a>
+                                              
+                                            </li>
+                                            <li class="drop-holder">
+                                                <a href="{% url 'front:product_list' %}">Mahsulotlar</a>
                                               
                                             </li>
                                             <li class="megamenu-holder">
-                                                <a href="shop.html">Category</a>
+                                                <a href="shop.html">Kategorya</a>
                                                 <ul class="drop-menu megamenu">
                                                     <li>
-                                                        <span class="title">Categoryyalar</span>
+                                                        <span class="title">Kategoryalar</span>
                                                         <ul>
                                                             {% for category in categorys %}
                                                             <li>
@@ -240,22 +245,20 @@
                                                 </ul>
                                             </li>
                                             <li class="drop-holder">
-                                                <a href="#">Cart</a>
+                                                <a href="#">Savat</a>
                                                 <ul class="drop-menu">
                                                     <li>
-                                                        <a href="{% url 'front:cart_active' %}">Cart</a>
+                                                        <a href="{% url 'front:cart_active' %}">Savat</a>
                                                     </li>
                                                     <li>
-                                                        <a href="{% url 'front:cart_list' %}">Cart list(arxiv)</a>
+                                                        <a href="{% url 'front:cart_list' %}">Savatlar tarixi</a>
                                                     </li>
                                                 </ul>
                                             </li>
                                             <li>
                                                 <a href="{% url 'front:order_list' %}">Buyurtmalar</a>
                                             </li>
-                                            <li>
-                                                <a href="contact.html">Contact Us</a>
-                                            </li>
+
                                         </ul>
                                     </nav>
                                 </div>
@@ -662,7 +665,7 @@
         {% endblock %}
 
         <!-- Begin Footer Area -->
-        <div class="footer-area" data-bg-image="assets/images/footer/bg/1-1920x465.jpg">
+        <div class="footer-area" data-bg-image="{% static 'front/assets/images/footer/bg/1-1920x465.jpg' %}">
             <div class="footer-top section-space-top-100 pb-60">
                 <div class="container">
                     <div class="row">
@@ -673,10 +676,10 @@
                                         <img src="{% static 'front/assets/images/logo/dark.png' %}" alt="Logo">
                                     </a>
                                 </div>
-                                <p class="footer-widget-desc">Lorem ipsum dolor sit amet, consec adipisl elit, sed do eiusmod
-                                    tempor
+                                <p class="footer-widget-desc">
+                                    Foydali va sifatli xaridlar
                                     <br>
-                            incidio ut labore et dolore magna.
+                                    bizning do'konda
                                 </p>
                                 <div class="social-link with-border">
                                     <ul>
@@ -704,29 +707,30 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-2 col-md-4 pt-40">
+                        <div class="col-2"></div>
+                        <div class="col-lg-4 col-md-4 pt-40">
                             <div class="footer-widget-item">
-                                <h3 class="footer-widget-title">Useful Links</h3>
+                                <h3 class="footer-widget-title">Qo'shimcha linklar</h3>
                                 <ul class="footer-widget-list-item">
                                     <li>
-                                        <a href="#">About Pronia</a>
+                                        <a href="{% url 'dashboard:profile_update' %}">Akauntim</a>
                                     </li>
                                     <li>
-                                        <a href="#">How to shop</a>
+                                        <a href="{% url 'front:product_list' %}">Mahsulotlar</a>
                                     </li>
                                     <li>
-                                        <a href="#">FAQ</a>
+                                        <a href="{% url 'front:order_list' %}">Buyurtmalar</a>
                                     </li>
                                     <li>
-                                        <a href="#">Contact us</a>
+                                        <a href="{% url 'auth:sign-in' %}">Akaunt yaratish</a>
                                     </li>
                                     <li>
-                                        <a href="#">Log in</a>
+                                        <a href="{% url 'auth:log-out' %}">Chiqish</a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-lg-2 col-md-4 pt-40">
+                        <!-- <div class="col-lg-2 col-md-4 pt-40">
                             <div class="footer-widget-item">
                                 <h3 class="footer-widget-title">My Account</h3>
                                 <ul class="footer-widget-list-item">
@@ -769,15 +773,15 @@
                                     </li>
                                 </ul>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="col-lg-3 pt-40">
                             <div class="footer-contact-info">
-                                <h3 class="footer-widget-title">Got Question? Call Us</h3>
-                                <a class="number" href="tel://123-456-789">123 456 789</a>
+                                <h3 class="footer-widget-title"> Savollar ? uchun</h3>
+                                <a class="number" href="tel://+998907862817">+998907862817</a>
                                 <div class="address">
                                     <ul>
                                         <li>
-                                            Your Address Goes Here
+
                                         </li>
                                     </ul>
                                 </div>
@@ -796,8 +800,8 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="copyright">
-                                <span class="copyright-text">© 2021 Pronia Made with <i class="fa fa-heart text-danger"></i> by
-                            <a href="https://hasthemes.com/" rel="noopener" target="_blank">HasThemes</a> </span>
+                                <span class="copyright-text">© 2024 Pronia Market <i class="fa fa-telegram text-danger"></i> 
+                            <a href="https://t.me/zahridd1n" rel="noopener" target="_blank"><span> </span> Zaxiriddin</a> </span>
                             </div>
                         </div>
                     </div>

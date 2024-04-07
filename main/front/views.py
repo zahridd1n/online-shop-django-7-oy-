@@ -1,38 +1,62 @@
 from django.shortcuts import render, redirect
 from main import models
 from django.contrib.auth.decorators import login_required
-from datetime import date
 
 
 @login_required(login_url='auth:sign-in')
-def index(request):
+def product_list(request):
     categorys = models.Category.objects.all()
-    products = models.Product.objects.all()
     cart = models.Cart.objects.get_or_create(user=request.user, status=1)
     wishlist = models.WishList.objects.filter(user=request.user)
 
-    wishlisted_codes = [item.product.code for item in wishlist]
-    # print(wishlisted_codes)
+    category_code = request.GET.get('category_id')
+    if category_code:
+
+        filter_items = {}
+        for key, value in request.GET.items():
+            print(key, value)
+            if value and not value == '0':
+                if key == 'min_price':
+                    key = 'price__gte'
+                elif key == 'max_price':
+                    key = 'price__lte'
+                elif key == 'name':
+                    key = 'name__icontains'
+
+                filter_items[key] = value
+
+        products = models.Product.objects.filter(**filter_items)
+    else:
+        products = models.Product.objects.all()
+
+    code = [item.product.code for item in wishlist]
     for product in products:
-        v = product.code in wishlisted_codes
-        setattr(product, 'is_wishlisted', v)
+        value = product.code in code
+        setattr(product, 'is_wishlisted', value)
 
     context = {
         'categorys': categorys,
         'products': products,
-        'wishlist': wishlist,
         'cart': cart,
+        'wishlist': wishlist,
 
     }
-    return render(request, 'front/index.html', context)
+
+    return render(request, 'front/products.html', context)
 
 
+@login_required(login_url='auth:sign-in')
 def category_list(request, id):
     categorys = models.Category.objects.all()
     catg = models.Category.objects.get(id=id)
     products = models.Product.objects.filter(category=catg)
     cart = models.Cart.objects.get_or_create(user=request.user, status=1)
     wishlist = models.WishList.objects.filter(user=request.user)
+
+    code = [item.product.code for item in wishlist]
+    for product in products:
+        value = product.code in code
+        setattr(product, 'is_wishlisted', value)
     context = {
         'categorys': categorys,
         'products': products,
@@ -43,6 +67,37 @@ def category_list(request, id):
     }
 
     return render(request, 'front/shoplist.html', context)
+
+
+@login_required(login_url='auth:sign-in')
+def index(request):
+    categorys = models.Category.objects.all()
+    products = models.Product.objects.all()
+    cart = models.Cart.objects.get_or_create(user=request.user, status=1)
+    wishlist = models.WishList.objects.filter(user=request.user)
+    testimonal = models.Review.objects.filter().order_by('-id')[1:6]
+
+    wishlisted_codes = [item.product.code for item in wishlist]
+    # print(wishlisted_codes)
+    for product in products:
+        v = product.code in wishlisted_codes
+        setattr(product, 'is_wishlisted', v)
+
+    newproduct = products.order_by('-id')[:4]
+    for new in newproduct:
+        v = new.code in wishlisted_codes
+        setattr(new, 'is_wishlisted', v)
+
+    context = {
+        'categorys': categorys,
+        'products': products,
+        'wishlist': wishlist,
+        'cart': cart,
+        'testimonal': testimonal,
+        'newproducts': newproduct
+
+    }
+    return render(request, 'front/index.html', context)
 
 
 def product_detail(request, code):
@@ -153,9 +208,11 @@ def product_order(request):
 
 @login_required(login_url='auth:sign-in')
 def order_list(request):
+    categorys = models.Category.objects.all()
     queryset = models.Cart.objects.filter(user=request.user, status__in=[2, 3, 4]).order_by('-date')
     context = {
         'queryset': queryset,
+        'categorys': categorys,
     }
 
     return render(request, 'front/order/list.html', context)
