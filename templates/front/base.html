@@ -95,7 +95,7 @@
                                     <a href="tel://+00-123-456-789">+00 123 456 789</a>
                                 </div>
 
-                                <a href="index.html" class="header-logo">
+                                <a href="{% url 'front:index' %}" class="header-logo">
                                     <img src="{% static 'front/assets/images/logo/dark.png' %}" alt="Header Logo">
                                 </a>
 
@@ -164,7 +164,7 @@
                                           
                                         </li>
                                         <li class="megamenu-holder">
-                                            <a href="shop.html">Kategorya</a>
+                                            <a href="#">Kategorya</a>
                                             <ul class="drop-menu megamenu">
                                                 <li>
                                                     <span class="title">Categoryyalar</span>
@@ -183,7 +183,7 @@
                                         </li>
                         
                                         <li class="drop-holder">
-                                            <a href="#">Savat</a>
+                                            <a href="{% url 'front:cart_active' %}">Savat</a>
                                             <ul class="drop-menu">
                                                 <li>
                                                     <a href="{% url 'front:cart_active' %}">Savat</a>
@@ -209,7 +209,7 @@
                         <div class="row align-items-center">
                             <div class="col-lg-3 col-6">
 
-                                <a href="index.html" class="header-logo">
+                                <a href="{% url 'front:index' %}" class="header-logo">
                                     <img src="{% static 'front/assets/images/logo/dark.png' %}" alt="Header Logo">
                                 </a>
 
@@ -227,7 +227,7 @@
                                               
                                             </li>
                                             <li class="megamenu-holder">
-                                                <a href="shop.html">Kategorya</a>
+                                                <a href="#">Kategorya</a>
                                                 <ul class="drop-menu megamenu">
                                                     <li>
                                                         <span class="title">Kategoryalar</span>
@@ -245,7 +245,7 @@
                                                 </ul>
                                             </li>
                                             <li class="drop-holder">
-                                                <a href="#">Savat</a>
+                                                <a href="{% url 'front:cart_active' %}">Savat</a>
                                                 <ul class="drop-menu">
                                                     <li>
                                                         <a href="{% url 'front:cart_active' %}">Savat</a>
@@ -585,9 +585,9 @@
                         </div>
                         <div class="modal-body">
                             <div class="modal-search">
-                                <span class="searchbox-info">Start typing and press Enter to search or ESC to close</span>
-                                <form action="#" class="hm-searchbox">
-                                    <input type="text" name="Search..." value="Search..." onblur="if(this.value==''){this.value='Search...'}" onfocus="if(this.value=='Search...'){this.value=''}" autocomplete="off">
+                                <span class="searchbox-info">Qidirush uchun ENTERNI  bosing yoki ESC orqali ortaga qayting</span>
+                                <form action="{% url 'front:product_list' %}" class="hm-searchbox">
+                                    <input type="text" name="name" value="Search..." onblur="if(this.value==''){this.value='Search...'}" onfocus="if(this.value=='Search...'){this.value=''}" autocomplete="off">
                                     <button class="search-btn" type="submit" aria-label="searchbtn">
                                         <i class="pe-7s-search"></i>
                                     </button>

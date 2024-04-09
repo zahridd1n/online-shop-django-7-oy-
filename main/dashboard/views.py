@@ -4,16 +4,42 @@ from decimal import Decimal
 from django.contrib.auth.decorators import login_required
 from main.models import User
 from main.func import staff_required
+from django.db.models import Sum
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+
+
+def paginator_page(List, num, request):
+    paginator = Paginator(List, num)
+    pages = request.GET.get('page')
+    try:
+        lists = paginator.page(pages)
+    except PageNotAnInteger:
+        lists = paginator.page(1)
+    except EmptyPage:
+        lists = paginator.page(paginator.num_pages)
+
+    return lists
 
 
 @staff_required
 def index(request):
     products = models.Product.objects.all()
-    category = models.Category.objects.all()
+    categorys = models.Category.objects.all()
+    datas = {}
+
+    for category in categorys:
+        total_quantity = models.Product.objects.filter(category=category).aggregate(total_quantity=Sum('quantity'))[
+                             'total_quantity'] or 0
+        datas[category] = total_quantity
+
+    data = []
+    for d in datas.values():
+        data.append(d)
 
     context = {
         'products': products,
-        'category': category,
+        'category': categorys,
+        'datas': data,
     }
 
     return render(request, 'dashboard/index.html', context)
@@ -68,7 +94,7 @@ def product_list(request):
         queryset = models.Product.objects.all()
         i = None
     context = {
-        'queryset': queryset,
+        'queryset': paginator_page(queryset, 5, request),
         'categorys': categorys,
         'i': i
     }
@@ -104,6 +130,10 @@ def product_create(request):
             quantity=request.POST['quantity'],
             delivery=delivery
         )
+        if request.POST.get('discount_price'):
+            discount_price = request.POST['discount_price']
+            product.discount_price = Decimal(discount_price)
+            product.save()
         images = request.FILES.getlist('images')
         for image in images:
             models.ProductImg.objects.create(
@@ -142,11 +172,12 @@ def product_update(request, code):
         product.body = request.POST['body']
         price = request.POST.get('price')
         product.price = Decimal(price)
-        print(product.price)
+        if request.POST.get('discount_price'):
+            discount_price = request.POST['discount_price']
+            product.discount_price = Decimal(discount_price)
 
         if request.FILES.get('banner_id'):
             product.banner_img = request.FILES['banner_img']
-        product.quantity = request.POST['quantity']
         product.delivery = delivery
         product.save()
 
@@ -164,7 +195,7 @@ def product_update(request, code):
                 video=video
             )
 
-        # return redirect('dashboard:product_list')
+        return redirect('dashboard:product_list')
     return render(request, 'dashboard/product/update.html', context)
 
 

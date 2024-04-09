@@ -64,7 +64,14 @@
                             <div class="single-product-content">
                                 <h2 class="title">{{product.name}}</h2>
                                 <div class="price-box">
+                                    
+                                    {% if product.discount_price %}
+                                    <span class="new-price">{{product.discount_price}}</span>
+                                    <span class="" style="text-decoration:line-through; font-size: 12px;">{{product.price}}</span>
+                                    {% else %}
                                     <span class="new-price">{{product.price}}</span>
+                                    
+                                    {% endif %}
                                 </div>
                                 <div class="rating-box-wrap pb-4">
                                     <div class="rating-box">
@@ -262,193 +269,94 @@
                 </div>
             </div>
 
-            <!-- Begin Product Area -->
-            <div class="product-area section-space-y-axis-90">
-                <div class="container">
-                    <div class="row">
-                        <div class="section-title-wrap without-tab">
-                            <h2 class="section-title">Uxshash Maxsulotlar</h2>
+        <!-- Begin Product Area -->
+        <div class="product-area section-space-top-100">
+            <div class="container">
+                <div class="section-title-wrap">
+                    <h2 class="section-title">Uxshash Maxsulotlar</h2>
                             <p class="section-desc">Shu turdagi sizga tafsiya etiladigan uxshash maxsulotlar
                             </p>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="swiper-container product-slider">
-                                <div class="swiper-wrapper">
-                                    <div class="swiper-slide product-item">
-                                        <div class="product-img">
-                                            <a href="single-product-variable.html">
-                                                <img class="primary-img" src="{% static 'front/assets/images/product/medium-size/1-9-270x300.jpg' %}" alt="Product Images">
-                                                <img class="secondary-img" src="{% static 'front/assets/images/product/medium-size/1-10-270x300.jpg' %}" alt="Product Images">
-                                           </a>
-                                            <div class="product-add-action">
-                                                <ul>
-                                                    <li>
-                                                        <a href="wishlist.html" data-tippy="Add to wishlist" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
-                                                            <i class="pe-7s-like"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li class="quuickview-btn" data-bs-toggle="modal" data-bs-target="#quickModal">
-                                                        <a href="#" data-tippy="Quickview" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
-                                                            <i class="pe-7s-look"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="cart.html" data-tippy="Add to cart" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
-                                                            <i class="pe-7s-cart"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
+                </div>
+                <br><br>
+                <div class="row">
+                    <div class="col-lg-12">
+              
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="featured" role="tabpanel" aria-labelledby="featured-tab">
+                                <div class="product-item-wrap row">
+                                    {% for product in recproducts %}
+                                    
+                                    <div class="col-lg-3 col-md-4 col-sm-6">
+                                        <div class="product-item">
+                                            <div class="product-img">
+                                                <a href="{% url 'front:product_detail' product.code %}">
+                                                    <img class="primary-img" src="{{product.banner_img.url}}" alt="Product Images">
+                                                    <img class="secondary-img" src="{{product.banner_img.url}}" alt="Product Images">
+                                                </a>
+                                                <div class="product-add-action">
+                                                    <ul>
+                                                        <li>
+                                                            
+                                                            {% if product.is_wishlisted %}
+                                                            <a href="{% url 'front:wishlist_delete' product.code %}" data-tippy="Add to wishlist" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
+                                                                <i class="fa fa-heart"></i>
+                                                            </a>
+                                                            {% else %}
+                                                            <a href="{% url 'front:wishlist_add' product.code %}" data-tippy="Add to wishlist" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
+                                                                <i class="pe-7s-like"></i>
+                                                            </a>
+
+                                                            {% endif %}
+
+                                              
+                                                        </li>
+                                                        <li >
+                                                            <a href="{% url 'front:product_detail' product.code %}" data-tippy="Quickview" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
+                                                                <i class="pe-7s-look"></i>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="{% url 'front:add_cart_product' product.code %}" data-tippy="Add to cart" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
+                                                                <i class="pe-7s-cart"></i>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="product-content">
-                                            <a class="product-name" href="single-product-variable.html">American Marigold</a>
-                                            <div class="price-box pb-1">
-                                                <span class="new-price">$23.45</span>
-                                            </div>
-                                            <div class="rating-box">
-                                                <ul>
-                                                    <li><i class="fa fa-star"></i></li>
-                                                    <li><i class="fa fa-star"></i></li>
-                                                    <li><i class="fa fa-star"></i></li>
-                                                    <li><i class="fa fa-star"></i></li>
-                                                    <li><i class="fa fa-star"></i></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide product-item">
-                                        <div class="product-img">
-                                            <a href="single-product-variable.html">
-                                                <img class="primary-img" src="{% static 'front/assets/images/product/medium-size/1-10-270x300.jpg' %}" alt="Product Images">
-                                                <img class="secondary-img" src="{% static 'front/assets/images/product/medium-size/1-11-270x300.jpg' %}" alt="Product Images">
-                                            </a>
-                                            <div class="product-add-action">
-                                                <ul>
-                                                    <li>
-                                                        <a href="wishlist.html" data-tippy="Add to wishlist" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
-                                                            <i class="pe-7s-like"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li class="quuickview-btn" data-bs-toggle="modal" data-bs-target="#quickModal">
-                                                        <a href="#" data-tippy="Quickview" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
-                                                            <i class="pe-7s-look"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="cart.html" data-tippy="Add to cart" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
-                                                            <i class="pe-7s-cart"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="product-content">
-                                            <a class="product-name" href="single-product-variable.html">Black Eyed Susan</a>
-                                            <div class="price-box pb-1">
-                                                <span class="new-price">$25.45</span>
-                                            </div>
-                                            <div class="rating-box">
-                                                <ul>
-                                                    <li><i class="fa fa-star"></i></li>
-                                                    <li><i class="fa fa-star"></i></li>
-                                                    <li><i class="fa fa-star"></i></li>
-                                                    <li><i class="fa fa-star"></i></li>
-                                                    <li><i class="fa fa-star"></i></li>
-                                                </ul>
+                                            <div class="product-content">
+                                                <a class="product-name" href="{% url 'front:product_detail' product.code %}">{{product.name}}</a>
+                                                <div class="price-box pb-1">
+                                                    {% if product.discount_price %}
+                                                        <span class="new-price">{{product.discount_price}}</span>
+                                                        <span class="" style="text-decoration:line-through; font-size: 12px;">{{product.price}}</span>
+                                                        {% else %}
+                                                        <span class="new-price">{{product.price}}</span>
+                                                        
+                                                        {% endif %}
+                                                </div>
+                                                <div class="rating-box">
+                                                    <ul>
+                                                        <li><i class="fa fa-star"></i></li>
+                                                        <li><i class="fa fa-star"></i></li>
+                                                        <li><i class="fa fa-star"></i></li>
+                                                        <li><i class="fa fa-star"></i></li>
+                                                        <li><i class="fa fa-star"></i></li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="swiper-slide product-item">
-                                        <div class="product-img">
-                                            <a href="single-product-variable.html">
-                                                <img class="primary-img" src="{% static 'front/assets/images/product/medium-size/1-11-270x300.jpg' %}" alt="Product Images">
-                                                <img class="secondary-img" src="{% static 'front/assets/images/product/medium-size/1-4-270x300.jpg' %}" alt="Product Images">
-                                            </a>
-                                            <div class="product-add-action">
-                                                <ul>
-                                                    <li>
-                                                        <a href="wishlist.html" data-tippy="Add to wishlist" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
-                                                            <i class="pe-7s-like"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li class="quuickview-btn" data-bs-toggle="modal" data-bs-target="#quickModal">
-                                                        <a href="#" data-tippy="Quickview" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
-                                                            <i class="pe-7s-look"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="cart.html" data-tippy="Add to cart" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
-                                                            <i class="pe-7s-cart"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="product-content">
-                                            <a class="product-name" href="single-product-variable.html">Bleeding Heart</a>
-                                            <div class="price-box pb-1">
-                                                <span class="new-price">$30.45</span>
-                                            </div>
-                                            <div class="rating-box">
-                                                <ul>
-                                                    <li><i class="fa fa-star"></i></li>
-                                                    <li><i class="fa fa-star"></i></li>
-                                                    <li><i class="fa fa-star"></i></li>
-                                                    <li><i class="fa fa-star"></i></li>
-                                                    <li><i class="fa fa-star"></i></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide product-item">
-                                        <div class="product-img">
-                                            <a href="single-product-variable.html">
-                                                <img class="primary-img" src="{% static 'front/assets/images/product/medium-size/1-7-270x300.jpg' %}" alt="Product Images">
-                                                <img class="secondary-img" src="{% static 'front/assets/images/product/medium-size/1-8-270x300.jpg' %}" alt="Product Images">
-                                            </a>
-                                            <div class="product-add-action">
-                                                <ul>
-                                                    <li>
-                                                        <a href="wishlist.html" data-tippy="Add to wishlist" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
-                                                            <i class="pe-7s-like"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li class="quuickview-btn" data-bs-toggle="modal" data-bs-target="#quickModal">
-                                                        <a href="#" data-tippy="Quickview" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
-                                                            <i class="pe-7s-look"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="cart.html" data-tippy="Add to cart" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
-                                                            <i class="pe-7s-cart"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="product-content">
-                                            <a class="product-name" href="single-product-variable.html">Bloody Cranesbill</a>
-                                            <div class="price-box pb-1">
-                                                <span class="new-price">$45.00</span>
-                                            </div>
-                                            <div class="rating-box">
-                                                <ul>
-                                                    <li><i class="fa fa-star"></i></li>
-                                                    <li><i class="fa fa-star"></i></li>
-                                                    <li><i class="fa fa-star"></i></li>
-                                                    <li><i class="fa fa-star"></i></li>
-                                                    <li><i class="fa fa-star"></i></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {% endfor %}
                                 </div>
                             </div>
+                       
+
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Product Area End Here -->
+        </div>
+        <!-- BEGIN Product Area End Here -->
 
         </main>
         <!-- Main Content Area End Here  -->

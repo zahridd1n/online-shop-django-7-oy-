@@ -41,11 +41,15 @@
                                 <tbody>
                                     {% for i in queryset %}
                                     <tr>
+                                        {% if cart.status == 1 %}
                                         <td class="product_remove">
                                             <a href="{% url 'front:cart_product_delete' i.id %}">
                                                 <i class="pe-7s-close" data-tippy="Remove" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder" tabindex="0"></i>
                                             </a>
                                         </td>
+                                        {% else %}
+                                        <td><button class="btn btn-danger" >O'chirib <br> Bo'lmaydi</button></td>
+                                        {% endif %}
                                         <td class="product-thumbnail">
                                             <a href="#">
                                                 <img src="{{i.product.banner_img.url}}" alt="Cart Thumbnail" style="width: 100px;">

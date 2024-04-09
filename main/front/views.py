@@ -1,6 +1,23 @@
 from django.shortcuts import render, redirect
 from main import models
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django import template
+
+register = template.Library()
+
+
+def paginator_page(List, num, request):
+    paginator = Paginator(List, num)
+    pages = request.GET.get('page')
+    try:
+        lists = paginator.page(pages)
+    except PageNotAnInteger:
+        lists = paginator.page(1)
+    except EmptyPage:
+        lists = paginator.page(paginator.num_pages)
+
+    return lists
 
 
 @login_required(login_url='auth:sign-in')
@@ -11,7 +28,6 @@ def product_list(request):
 
     category_code = request.GET.get('category_id')
     if category_code:
-
         filter_items = {}
         for key, value in request.GET.items():
             print(key, value)
@@ -24,8 +40,9 @@ def product_list(request):
                     key = 'name__icontains'
 
                 filter_items[key] = value
-
         products = models.Product.objects.filter(**filter_items)
+    elif request.GET.get('name'):
+        products = models.Product.objects.filter(name__icontains=request.GET.get('name'))
     else:
         products = models.Product.objects.all()
 
@@ -36,9 +53,10 @@ def product_list(request):
 
     context = {
         'categorys': categorys,
-        'products': products,
+        'products': paginator_page(products, 6, request),
         'cart': cart,
         'wishlist': wishlist,
+        'range': range(5)
 
     }
 
@@ -59,10 +77,11 @@ def category_list(request, id):
         setattr(product, 'is_wishlisted', value)
     context = {
         'categorys': categorys,
-        'products': products,
+        'products': paginator_page(products, 8, request),
         'categor': catg,
         'cart': cart,
         'wishlist': wishlist,
+        'range': range(5)
 
     }
 
@@ -78,7 +97,6 @@ def index(request):
     testimonal = models.Review.objects.filter().order_by('-id')[1:6]
 
     wishlisted_codes = [item.product.code for item in wishlist]
-    # print(wishlisted_codes)
     for product in products:
         v = product.code in wishlisted_codes
         setattr(product, 'is_wishlisted', v)
@@ -90,13 +108,15 @@ def index(request):
 
     context = {
         'categorys': categorys,
-        'products': products,
+        'products': paginator_page(products, 8, request),
         'wishlist': wishlist,
         'cart': cart,
         'testimonal': testimonal,
-        'newproducts': newproduct
+        'newproducts': newproduct,
+        'range':range(5)
 
     }
+
     return render(request, 'front/index.html', context)
 
 
@@ -106,11 +126,18 @@ def product_detail(request, code):
     images = models.ProductImg.objects.filter(product=product.id)
     reviews = models.Review.objects.filter(product=product.id)
     cart = models.Cart.objects.get_or_create(user=request.user, status=1)
+    recproducts = models.Product.objects.filter(category=product.category).order_by('-id')[:4]
     wishlist = models.WishList.objects.filter(product=product, user=request.user)
     if wishlist:
         wishlist = wishlist[0]
-    # videos = models.ProductVideo.objects.filter(product=product)
-    print(images)
+
+    wishlists = models.WishList.objects.filter(user=request.user)
+    wishlist_codes = [item.product.code for item in wishlists]
+    for i in recproducts:
+        v = i.code in wishlist_codes
+        setattr(i, 'is_wishlisted', v)
+
+    print(product.adv_mark)
     context = {
         'categorys': categorys,
         'product': product,
@@ -118,7 +145,9 @@ def product_detail(request, code):
         'reviews': reviews,
         'wishlist': wishlist,
         'cart': cart,
+        'recproducts': recproducts,
         # 'videos': videos,
+
     }
     return render(request, 'front/shopdetail.html', context)
 

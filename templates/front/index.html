@@ -138,22 +138,62 @@
                                             <div class="product-content">
                                                 <a class="product-name" href="{% url 'front:product_detail' product.code %}">{{product.name}}</a>
                                                 <div class="price-box pb-1">
-                                                    <span class="new-price">{{product.price}}</span>
+                                                    {% if product.discount_price %}
+                                                        <span class="new-price">{{product.discount_price}}</span>
+                                                        <span class="" style="text-decoration:line-through; font-size: 12px;">{{product.price}}</span>
+                                                        {% else %}
+                                                        <span class="new-price">{{product.price}}</span>
+                                                        
+                                                        {% endif %}
                                                 </div>
                                                 <div class="rating-box">
                                                     <ul>
+                                                    
+                                                        {% for r in range %}
+                                                        {% if r <= product.adv_mark %}
                                                         <li><i class="fa fa-star"></i></li>
-                                                        <li><i class="fa fa-star"></i></li>
-                                                        <li><i class="fa fa-star"></i></li>
-                                                        <li><i class="fa fa-star"></i></li>
-                                                        <li><i class="fa fa-star"></i></li>
+                                                        {% else %}
+                                                        <li><i class="fa fa-star-o"></i></li>
+                                                        {% endif %}
+                                                        {% endfor %}
                                                     </ul>
                                                 </div>
                                             </div>
                                         </div>
+                                        <br>
+                                        <br>
                                     </div>
+                                    <br>
+                                    <br>
                                     {% endfor %}
                                 </div>
+                                {% if products.paginator.num_pages > 1 %}
+                                <div class="pagination-area">
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination justify-content-center">
+                                            {% if products.has_previous %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{products.previous_page_number }}" aria-label="Ortga">&laquo;</a>
+                                            </li>
+                                            {% endif %}
+                                            
+                                            {% for num in products.paginator.page_range %}
+                                                {% if num == products.number %}
+                                                    <li class="page-item active"><a class="page-link" href="?page={{num}}">{{num}}</a></li>
+                                                {% elif num > products.number|add:'-2' and num < products.number|add:'2' %}
+                                                <li class="page-item"><a class="page-link" href="?page={{num}}">{{num}}</a></li>
+                                                {% endif %}
+                                            {% endfor %}
+                                            
+                                            {% if products.has_next %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{products.next_page_number }}" aria-label="Keyingi">&raquo;</a>
+                                            </li>
+                                            {% endif %}
+                                        </ul>
+                                    </nav>
+                                </div>
+                                {% endif %}
                             </div>
                             <div class="tab-pane fade" id="bestseller" role="tabpanel" aria-labelledby="bestseller-tab">
                                 <div class="product-item-wrap row">
@@ -200,26 +240,35 @@
                                             <div class="product-content">
                                                 <a class="product-name" href="{% url 'front:product_detail' product.code %}">{{product.name}}</a>
                                                 <div class="price-box pb-1">
+                                                    {% if product.discount_price %}
+                                                    <span class="new-price">{{product.discount_price}}</span>
+                                                    <span class="" style="text-decoration:line-through; font-size: 12px;">{{product.price}}</span>
+                                                    {% else %}
                                                     <span class="new-price">{{product.price}}</span>
+                                                    
+                                                    {% endif %}
                                                 </div>
                                                 <div class="rating-box">
                                                     <ul>
+                                                        {% for r in range %}
+                                                        {% if r <= product.adv_mark %}
                                                         <li><i class="fa fa-star"></i></li>
-                                                        <li><i class="fa fa-star"></i></li>
-                                                        <li><i class="fa fa-star"></i></li>
-                                                        <li><i class="fa fa-star"></i></li>
-                                                        <li><i class="fa fa-star"></i></li>
+                                                        {% else %}
+                                                        <li><i class="fa fa-star-o"></i></li>
+                                                        {% endif %}
+                                                        {% endfor %}
                                                     </ul>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    
+                                    <br>
                                     {% endif %}
                                     {% endfor %}
                                 </div>
+                                
                             </div>
-
+                            
                         </div>
                     </div>
                 </div>
@@ -234,6 +283,7 @@
                 <div class="section-title-wrap">
                     <h2 class="section-title mb-0">Yangi Tavarlar</h2>
                 </div>
+                <br><br>
                 <div class="row">
                     <div class="col-lg-12">
               
@@ -282,15 +332,23 @@
                                             <div class="product-content">
                                                 <a class="product-name" href="{% url 'front:product_detail' product.code %}">{{product.name}}</a>
                                                 <div class="price-box pb-1">
+                                                    {% if product.discount_price %}
+                                                    <span class="new-price">{{product.discount_price}}</span>
+                                                    <span class="" style="text-decoration:line-through; font-size: 12px;">{{product.price}}</span>
+                                                    {% else %}
                                                     <span class="new-price">{{product.price}}</span>
+                                                    
+                                                    {% endif %}
                                                 </div>
                                                 <div class="rating-box">
                                                     <ul>
+                                                        {% for r in range %}
+                                                        {% if r <= product.adv_mark %}
                                                         <li><i class="fa fa-star"></i></li>
-                                                        <li><i class="fa fa-star"></i></li>
-                                                        <li><i class="fa fa-star"></i></li>
-                                                        <li><i class="fa fa-star"></i></li>
-                                                        <li><i class="fa fa-star"></i></li>
+                                                        {% else %}
+                                                        <li><i class="fa fa-star-o"></i></li>
+                                                        {% endif %}
+                                                        {% endfor %}
                                                     </ul>
                                                 </div>
                                             </div>
@@ -306,7 +364,7 @@
                 </div>
             </div>
         </div>
-        <!-- Product Area End Here -->
+        <!-- BEGIN Product Area End Here -->
         <!-- Begin Testimonial Area -->
         <div class="testimonial-area section-space-top-90 section-space-bottom-95">
             <div class="container-fluid">

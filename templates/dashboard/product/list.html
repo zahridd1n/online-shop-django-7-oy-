@@ -73,8 +73,37 @@
                             </tr>
                             {% endfor %}
                         </tbody>
+                        
                     </table>
+
                 </div>
+                {% if queryset.paginator.num_pages > 1 %}
+                <div class="pagination-area">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            {% if queryset.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{queryset.previous_page_number }}" aria-label="Ortga">&laquo;</a>
+                            </li>
+                            {% endif %}
+                            
+                            {% for num in queryset.paginator.page_range %}
+                                {% if num == queryset.number %}
+                                    <li class="page-item active"><a class="page-link" href="?page={{num}}">{{num}}</a></li>
+                                {% elif num > queryset.number|add:'-2' and num < queryset.number|add:'2' %}
+                                <li class="page-item"><a class="page-link" href="?page={{num}}">{{num}}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            {% if queryset.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{queryset.next_page_number }}" aria-label="Keyingi">&raquo;</a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>

@@ -60,6 +60,12 @@ class Product(CodeGenerate):
     def stock_status(self):
         return bool(self.quantity)
 
+    @property
+    def adv_mark(self):
+        review = Review.objects.filter(product__code=self.code)
+        mark = [i.mark for i in review]
+        return sum(mark) // len(mark)
+
 
 class EnterProduct(CodeGenerate):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
